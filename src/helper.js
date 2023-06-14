@@ -1,4 +1,4 @@
-export const waait= () => new Promise(res => setTimeout(res, Math.random()*2000));
+export const waait= () => new Promise(res => setTimeout(res, Math.random()*800));
 
 //colors
 const generateRandomColor = () => {
@@ -26,7 +26,59 @@ export const createBudget = ({
     return localStorage.setItem("budgets", JSON.stringify([...existingBudgets, newItem]))
 }
 
+//create expense
+export const createExpense = ({
+    name, amount, budgetId
+}) => {
+    const newItem = {
+        id: crypto.randomUUID(),
+        name: name,
+        createAt: Date.now(),
+        amount: +amount,
+       budgetId: budgetId
+    }
+    const existingExpenses = fetchData("expenses") ?? [];
+    console.log(newItem)
+    return localStorage.setItem("expenses", JSON.stringify([...existingExpenses, newItem]))
+}
+
 // delete item
 export const deleteItem = ({key}) =>{
     return localStorage.removeItem(key)
+}
+
+
+//total spent by budget
+export const calSpentByBudget = (budgetId) => {
+    const expenses = fetchData("expenses")?? [];
+    const budgetSpent = expenses.reduce((acc,expense) => {
+        //check if expense.id === budgetId
+        if(expense.budgetId !== budgetId) return acc
+
+        //add the current amount to the total
+        return acc += expense.amount
+    }, 0)
+    return budgetSpent;
+}
+
+
+//formatting
+export const formatDateToLocaleString = (epoch) => 
+new Date(epoch).toLocaleDateString();
+
+//formatting percentages
+export const formatPercentage = (amt) => {
+    return amt.toLocaleString(undefined, {
+        style: "percent",
+        minimumFractionDigits: 0,
+    })
+}
+
+
+//format currency
+export const formatCurrency = (amt) => {
+    return amt.toLocaleString(undefined, {
+        style: "currency",
+        currency: "INR"
+    })
 }
