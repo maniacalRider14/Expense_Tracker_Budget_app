@@ -18,7 +18,7 @@ export const createBudget = ({
     const newItem = {
         id: crypto.randomUUID(),
         name: name,
-        createAt: Date.now(),
+        createdAt: Date.now(),
         amount: +amount,
         color: generateRandomColor()
     }
@@ -33,7 +33,7 @@ export const createExpense = ({
     const newItem = {
         id: crypto.randomUUID(),
         name: name,
-        createAt: Date.now(),
+        createdAt: Date.now(),
         amount: +amount,
        budgetId: budgetId
     }
